@@ -31,41 +31,37 @@ public class Calculator {
     }
 
     private void outputMenu() {
-        System.out.println("Enter operation number:");
-        System.out.println("1. +");
-        System.out.println("2. -");
-        System.out.println("3. *");
-        System.out.println("4. /");
-        System.out.println("0. Exit");
+        System.out.println("Enter operation:");
+        System.out.println("+");
+        System.out.println("-");
+        System.out.println("*");
+        System.out.println("/");
+        System.out.println("0 - Exit");
     }
 
     private void inputOperation() {
         Scanner userInput = new Scanner(System.in);
-        while (!userInput.hasNextInt()) {
-            System.out.println("Enter operation number: 1,2, 3 or 4.");
-            userInput.next();
-        }
-        choiceMenu(userInput.nextInt());
+        choiceMenu(userInput.next());
     }
 
-    private void choiceMenu(int numMenu) {
-        switch (numMenu) {
-            case 1:
+    private void choiceMenu(String operation) {
+        switch (operation) {
+            case "+":
                 add(a, b);
                 break;
-            case 2:
+            case "-":
                 subtract(a, b);
                 break;
-            case 3:
+            case "*":
                 multiply(a, b);
                 break;
-            case 4:
+            case "/":
                 divide(a, b);
                 break;
-            case 0:
+            case "0":
                 break;
             default:
-                System.out.println("Enter operation number: 1,2, 3 or 4.");
+                System.out.println("Enter operation: +, -, * or /.");
                 inputOperation();
                 break;
         }
