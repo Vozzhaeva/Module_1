@@ -1,6 +1,7 @@
 package com.epam.anastasiia_vozzhaeva.lesson2.task2.recipes;
 
 import com.epam.anastasiia_vozzhaeva.lesson2.task2.products.*;
+import com.epam.anastasiia_vozzhaeva.lesson3.EmptyIngredientException;
 
 import java.util.concurrent.TimeUnit;
 

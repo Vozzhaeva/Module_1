@@ -1,13 +1,17 @@
 package com.epam.anastasiia_vozzhaeva.lesson2.task2.recipes;
 
 import com.epam.anastasiia_vozzhaeva.lesson2.task2.products.*;
+import com.epam.anastasiia_vozzhaeva.lesson3.EmptyIngredientException;
+import com.epam.anastasiia_vozzhaeva.lesson3.IngredientCaloriesPerMeasureException;
+import com.epam.anastasiia_vozzhaeva.lesson3.IngredientNamingException;
+import com.epam.anastasiia_vozzhaeva.lesson3.WrongQuantityException;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class BorschTest {
 
     @Test
-    public void shouldСountIngredientsInBorsch() throws EmptyIngredientException {
+    public void shouldСountIngredientsInBorsch() throws EmptyIngredientException, WrongQuantityException, IngredientNamingException, IngredientCaloriesPerMeasureException {
         Borsch borsch = new Borsch(
                 new Carrot(90),
                 new Onion(80),
@@ -21,7 +25,7 @@ public class BorschTest {
     }
 
     @Test
-    public void shouldCountBorschCalories() throws EmptyIngredientException {
+    public void shouldCountBorschCalories() throws EmptyIngredientException, WrongQuantityException, IngredientNamingException, IngredientCaloriesPerMeasureException {
         Borsch borsch = new Borsch(
                 new Carrot(90),
                 new Onion(80),
@@ -37,7 +41,7 @@ public class BorschTest {
     }
 
     @Test(expected = EmptyIngredientException.class)
-    public void shouldThrowExceptionOnEmptyIngredient() throws EmptyIngredientException {
+    public void shouldThrowExceptionOnEmptyIngredient() throws EmptyIngredientException, WrongQuantityException, IngredientNamingException, IngredientCaloriesPerMeasureException {
         new Borsch(
                 null,
                 new Onion(80),

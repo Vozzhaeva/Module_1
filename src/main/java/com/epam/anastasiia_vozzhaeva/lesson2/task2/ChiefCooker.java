@@ -2,16 +2,19 @@ package com.epam.anastasiia_vozzhaeva.lesson2.task2;
 
 import com.epam.anastasiia_vozzhaeva.lesson2.task2.products.*;
 import com.epam.anastasiia_vozzhaeva.lesson2.task2.recipes.Borsch;
-import com.epam.anastasiia_vozzhaeva.lesson2.task2.recipes.EmptyIngredientException;
 import com.epam.anastasiia_vozzhaeva.lesson2.task2.recipes.Salad;
+import com.epam.anastasiia_vozzhaeva.lesson3.EmptyIngredientException;
+import com.epam.anastasiia_vozzhaeva.lesson3.IngredientCaloriesPerMeasureException;
+import com.epam.anastasiia_vozzhaeva.lesson3.IngredientNamingException;
+import com.epam.anastasiia_vozzhaeva.lesson3.WrongQuantityException;
 
 public class ChiefCooker {
-    public static void main(String[] args) throws InterruptedException, EmptyIngredientException {
+    public static void main(String[] args) throws InterruptedException, EmptyIngredientException, WrongQuantityException, IngredientNamingException, IngredientCaloriesPerMeasureException {
         ChiefCooker chiefCooker = new ChiefCooker();
         chiefCooker.startApplication();
     }
 
-    private void startApplication() throws InterruptedException, EmptyIngredientException {
+    private void startApplication() throws InterruptedException, EmptyIngredientException, WrongQuantityException, IngredientNamingException, IngredientCaloriesPerMeasureException {
         Salad vegetableSalad = new Salad(
                 new Tomato(200),
                 new Cucumber(170),
