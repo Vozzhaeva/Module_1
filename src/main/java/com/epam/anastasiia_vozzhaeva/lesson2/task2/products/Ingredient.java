@@ -4,6 +4,8 @@ import com.epam.anastasiia_vozzhaeva.lesson3.IngredientCaloriesPerMeasureExcepti
 import com.epam.anastasiia_vozzhaeva.lesson3.IngredientNamingException;
 import com.epam.anastasiia_vozzhaeva.lesson3.WrongQuantityException;
 
+import java.util.Objects;
+
 public abstract class Ingredient implements Preparable {
     private String name;
     private int caloriesPerMeasure;
@@ -11,9 +13,8 @@ public abstract class Ingredient implements Preparable {
     private Measure measure;
 
     public Ingredient(String name, int caloriesPerMeasure, int quantity, Measure measure) throws IngredientNamingException, WrongQuantityException, IngredientCaloriesPerMeasureException {
-        if (name == null || measure == null) {
-            throw new NullPointerException("Необходимо задать не null значения");
-        }
+        Objects.requireNonNull(name, "Необходимо задать не null значения");
+        Objects.requireNonNull(measure, "Необходимо задать не null значения");
         if (name.equals("")) {
             throw new IngredientNamingException();
         }
