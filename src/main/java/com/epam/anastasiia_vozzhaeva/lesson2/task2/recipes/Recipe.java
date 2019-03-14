@@ -1,6 +1,7 @@
 package com.epam.anastasiia_vozzhaeva.lesson2.task2.recipes;
 
 import com.epam.anastasiia_vozzhaeva.lesson2.task2.products.Ingredient;
+import com.epam.anastasiia_vozzhaeva.lesson3.EmptyIngredientException;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,7 +26,7 @@ public interface Recipe {
     default void checkIngredientsNotNull(Ingredient[] ingredients) throws EmptyIngredientException {
         for (Ingredient ingredient : ingredients) {
             if (ingredient == null) {
-                throw new EmptyIngredientException("Все ингредиенты салата должны быть проинициализированы!");
+                throw new EmptyIngredientException("Все ингредиенты должны быть определены!");
             }
         }
     }
