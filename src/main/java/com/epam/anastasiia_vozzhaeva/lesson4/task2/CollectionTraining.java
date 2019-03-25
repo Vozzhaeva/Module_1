@@ -1,5 +1,6 @@
 package com.epam.anastasiia_vozzhaeva.lesson4.task2;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -46,7 +47,7 @@ public class CollectionTraining {
         return isRandom;
     }
 
-    private boolean isUnique(Set<Integer> sequence) {
+    private boolean isUnique(Collection<Integer> sequence) {
         Set<Integer> counter = new HashSet<>();
         for (Integer element : sequence) {
             boolean contain = counter.contains(element);
@@ -73,13 +74,14 @@ public class CollectionTraining {
 
     private Set<Integer> removeOdd(Set<Integer> set) {
         Set<Integer> result = new HashSet<>();
-        set.forEach(e -> {
-                    if (e % 2 == 0) {
-                        result.add(e);
-                    }
-                }
-        );
+        set.forEach(element -> remove(result, element));
         return result;
+    }
+
+    private void remove(Set<Integer> result, Integer element) {
+        if (element % 2 == 0) {
+            result.add(element);
+        }
     }
 
     private Integer findMaxMinusOneElement(Set<Integer> set) {
