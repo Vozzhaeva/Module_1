@@ -4,12 +4,13 @@ import com.epam.anastasiia_vozzhaeva.lesson3.IngredientCaloriesPerMeasureExcepti
 import com.epam.anastasiia_vozzhaeva.lesson3.IngredientNamingException;
 import com.epam.anastasiia_vozzhaeva.lesson3.WrongQuantityException;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Ingredient implements Preparable {
+public abstract class Ingredient implements Preparable, Serializable {
     private String name;
-    private int caloriesPerMeasure;
-    private int quantity;
+    private transient int caloriesPerMeasure;
+    private transient int quantity;
     private Measure measure;
 
     public Ingredient(String name, int caloriesPerMeasure, int quantity, Measure measure) throws IngredientNamingException, WrongQuantityException, IngredientCaloriesPerMeasureException {
@@ -60,6 +61,16 @@ public abstract class Ingredient implements Preparable {
 
     public void setMeasure(Measure measure) {
         this.measure = measure;
+    }
+
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "name='" + name + '\'' +
+                ", caloriesPerMeasure=" + caloriesPerMeasure +
+                ", quantity=" + quantity +
+                ", measure=" + measure +
+                '}';
     }
 }
 
