@@ -7,6 +7,7 @@ import com.epam.anastasiia_vozzhaeva.lesson3.IngredientNamingException;
 import com.epam.anastasiia_vozzhaeva.lesson3.WrongQuantityException;
 
 import java.io.*;
+import java.util.Optional;
 
 public class ObjectSerialization {
     static final String NAME = "test.txt";
@@ -17,14 +18,15 @@ public class ObjectSerialization {
     }
 
     private void startApplication() throws WrongQuantityException, IngredientNamingException, IngredientCaloriesPerMeasureException {
+
         Tomato tomato = new Tomato(134);
         writeObject(tomato);
-        Tomato tomatoSerialized = (Tomato) readObject();
+        Optional<Tomato> tomatoSerialized = readObject();
         System.out.println(tomatoSerialized);
 
         Pepper pepper = new Pepper(342);
         writeObject(pepper);
-        Pepper pepperSerialized = (Pepper) readObject();
+        Optional <Pepper> pepperSerialized = readObject();
         System.out.println(pepperSerialized);
     }
 
@@ -37,14 +39,13 @@ public class ObjectSerialization {
         }
     }
 
-    private static Serializable readObject() {
-        Serializable serializable = null;
+    private static <T extends Serializable> Optional<T> readObject() {
         try (FileInputStream fis = new FileInputStream(NAME);
              ObjectInputStream in = new ObjectInputStream(fis)) {
-            serializable = (Serializable) in.readObject();
+            return Optional.of((T) in.readObject());
         } catch (IOException | ClassNotFoundException ex) {
             ex.printStackTrace();
         }
-        return serializable;
+        return Optional.empty();
     }
 }
