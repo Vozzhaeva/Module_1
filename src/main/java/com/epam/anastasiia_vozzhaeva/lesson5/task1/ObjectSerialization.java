@@ -26,7 +26,7 @@ public class ObjectSerialization {
 
         Pepper pepper = new Pepper(342);
         writeObject(pepper);
-        Optional <Pepper> pepperSerialized = readObject();
+        Optional<Pepper> pepperSerialized = readObject();
         System.out.println(pepperSerialized);
     }
 
@@ -42,7 +42,7 @@ public class ObjectSerialization {
     private static <T extends Serializable> Optional<T> readObject() {
         try (FileInputStream fis = new FileInputStream(NAME);
              ObjectInputStream in = new ObjectInputStream(fis)) {
-            return Optional.of((T) in.readObject());
+            return Optional.ofNullable((T) in.readObject());
         } catch (IOException | ClassNotFoundException ex) {
             ex.printStackTrace();
         }
