@@ -65,7 +65,7 @@ public class DiskAnalyzer {
         }
     }
 
-    private void printMaxSCountFile(File directory) throws IOException {
+    public void printMaxSCountFile(File directory) throws IOException {
         File terminateFilesByFilter = findMaxSInDirectory(directory, null);
         FileWriter writer = new FileWriter("file.txt", false);
         writer.write("Поиск имени файла с максимальным количеством букв ‘s’ в имени, вывод пути к нему: \n" + terminateFilesByFilter + "\nКоличество символов 's': " + getCountOfCharS(terminateFilesByFilter));
@@ -73,19 +73,22 @@ public class DiskAnalyzer {
         System.out.println("Результат успешно записан в файл file.txt");
     }
 
-    private File findMaxSInDirectory(File directory, File withMaxSCount) {
-        for (File file : directory.listFiles()) {
-            if (file.isDirectory()) {
-                withMaxSCount = findMaxSInDirectory(file, withMaxSCount);
-            } else {
-                Long countOfCharS = getCountOfCharS(file);
-                if (countOfCharS > 0) {
-                    if (withMaxSCount == null) {
-                        withMaxSCount = file;
-                    } else {
-                        Long currentMax = getCountOfCharS(withMaxSCount);
-                        if (currentMax < countOfCharS) {
+    public File findMaxSInDirectory(File directory, File withMaxSCount) {
+        File[] files = directory.listFiles();
+        if (files!=null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    withMaxSCount = findMaxSInDirectory(file, withMaxSCount);
+                } else {
+                    Long countOfCharS = getCountOfCharS(file);
+                    if (countOfCharS > 0) {
+                        if (withMaxSCount == null) {
                             withMaxSCount = file;
+                        } else {
+                            Long currentMax = getCountOfCharS(withMaxSCount);
+                            if (currentMax < countOfCharS) {
+                                withMaxSCount = file;
+                            }
                         }
                     }
                 }
@@ -94,18 +97,12 @@ public class DiskAnalyzer {
         return withMaxSCount;
     }
 
-    private static Long getCountOfCharS(File file) {
+    private Long getCountOfCharS(File file) {
         return file.getName().chars().filter(ch -> ch == 's' || ch == 'S').count();
     }
 
     private void print5MaxSizeFiles(File directory) throws IOException {
-        ArrayList<File> files = new ArrayList<>();
-        findAllFilesByDirectory(directory, files);
-        List<File> filteredFiles = files.stream()
-                .sorted(
-                        (item1, item2) -> Long.compare(item2.length(), item1.length())
-                ).limit(5).collect(Collectors.toList());
-
+        List<File> filteredFiles = find5MaxSizeFiles(directory);
         FileWriter writer = new FileWriter("file.txt", false);
         writer.write("Top-5 файлов с самым большим размером:");
         for (File file : filteredFiles) {
@@ -116,37 +113,53 @@ public class DiskAnalyzer {
         System.out.println("Результат успешно записан в файл file.txt");
     }
 
+    public List<File> find5MaxSizeFiles(File directory){
+        List<File> files = findAllFilesByDirectory(directory);
+        List<File> filteredFiles = files.stream()
+                .sorted(
+                        (item1, item2) -> Long.compare(item2.length(), item1.length())
+                ).limit(5).collect(Collectors.toList());
+        return filteredFiles;
+    }
 
-    private List<File> findAllFilesByDirectory(File directory, List<File> files) {
-        if (directory.isDirectory()) {
-            File[] fileList = directory.listFiles();
-            for (File file : fileList) {
-                if (file.isDirectory()) {
-                    findAllFilesByDirectory(file, files);
-                } else {
-                    if (!file.isHidden()) {
-                        files.add(file);
+    private List<File> findAllFilesByDirectory(File directory) {
+            List<File> files = new ArrayList<>();
+            if (directory.isDirectory()) {
+                File[] fileList = directory.listFiles();
+                if (fileList!=null) {
+                    for (File file : fileList) {
+                        if (file.isDirectory()) {
+                            files.addAll(findAllFilesByDirectory(file));
+                        } else {
+                                 if (!file.isHidden()) {
+                            files.add(file);
+                                 }
+                        }
                     }
                 }
             }
+            return files;
         }
-        return files;
-    }
+
 
     private void printAverageSize(File directory) throws IOException {
-        ArrayList<File> files = new ArrayList<>();
-        findAllFilesByDirectory(directory, files);
-        OptionalDouble average = files.stream()
-                .mapToLong(File::length)
-                .average();
-        double asDouble = average.getAsDouble();
+        double average = findAverageSize(directory);
         FileWriter writer = new FileWriter("file.txt", false);
-        writer.write("Средний размер файла в указанной директории и  любой ее поддиректории: " + asDouble);
+        writer.write("Средний размер файла в указанной директории и  любой ее поддиректории: " + average);
         writer.flush();
         System.out.println("Результат успешно записан в файл file.txt");
     }
 
-    private static void findCountByFirstAlphabet(File directory) throws IOException {
+
+    public Double findAverageSize(File directory){
+        List<File> files = findAllFilesByDirectory(directory);
+        OptionalDouble average = files.stream()
+                .mapToLong(File::length)
+                .average();
+         return average.getAsDouble();
+    }
+
+    private void findCountByFirstAlphabet(File directory) throws IOException {
         Map<Character, Long[]> resultMap = new HashMap<>();
         findAllFilesAndDirectories(directory, resultMap);
         FileWriter writer = new FileWriter("file.txt", false);
@@ -161,21 +174,23 @@ public class DiskAnalyzer {
         System.out.println("Результат успешно записан в файл file.txt");
     }
 
-    private static void findAllFilesAndDirectories(File directory, Map<Character, Long[]> files) {
+    public static void findAllFilesAndDirectories(File directory, Map<Character, Long[]> files) {
         if (directory.isDirectory()) {
             File[] fileList = directory.listFiles();
-            for (File file : fileList) {
-                Character firstChar = file.getName().charAt(0);
-                Long[] defaultValue = {0L, 0L};
-                Long[] counters = files.getOrDefault(firstChar, defaultValue);
-                if (file.isDirectory()) {
-                    counters[0] += 1;
-                } else {
-                    counters[1] += 1;
-                }
-                files.put(firstChar, counters);
-                if (file.isDirectory()) {
-                    findAllFilesAndDirectories(file, files);
+            if (fileList!=null) {
+                for (File file : fileList) {
+                    Character firstChar = file.getName().charAt(0);
+                    Long[] defaultValue = {0L, 0L};
+                    Long[] counters = files.getOrDefault(firstChar, defaultValue);
+                    if (file.isDirectory()) {
+                        counters[0] += 1;
+                    } else {
+                        counters[1] += 1;
+                    }
+                    files.put(firstChar, counters);
+                    if (file.isDirectory()) {
+                        findAllFilesAndDirectories(file, files);
+                    }
                 }
             }
         }
