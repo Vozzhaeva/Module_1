@@ -20,18 +20,18 @@ public class ObjectSerialization {
     private void startApplication() throws WrongQuantityException, IngredientNamingException, IngredientCaloriesPerMeasureException {
 
         Tomato tomato = new Tomato(134);
-        writeObject(tomato);
-        Optional<Tomato> tomatoSerialized = readObject();
+        writeObject(tomato, NAME);
+        Optional<Tomato> tomatoSerialized = readObject(NAME);
         System.out.println(tomatoSerialized);
 
         Pepper pepper = new Pepper(342);
-        writeObject(pepper);
-        Optional<Pepper> pepperSerialized = readObject();
+        writeObject(pepper, NAME);
+        Optional<Pepper> pepperSerialized = readObject(NAME);
         System.out.println(pepperSerialized);
     }
 
-    private static void writeObject(Serializable objectToSerialize) {
-        try (FileOutputStream fos = new FileOutputStream(NAME);
+    public static void writeObject(Serializable objectToSerialize, String fileName) {
+        try (FileOutputStream fos = new FileOutputStream(fileName);
              ObjectOutputStream out = new ObjectOutputStream(fos)) {
             out.writeObject(objectToSerialize);
         } catch (IOException ex) {
@@ -39,8 +39,8 @@ public class ObjectSerialization {
         }
     }
 
-    private static <T extends Serializable> Optional<T> readObject() {
-        try (FileInputStream fis = new FileInputStream(NAME);
+    public static <T extends Serializable> Optional<T> readObject(String fileName) {
+        try (FileInputStream fis = new FileInputStream(fileName);
              ObjectInputStream in = new ObjectInputStream(fis)) {
             return Optional.ofNullable((T) in.readObject());
         } catch (IOException | ClassNotFoundException ex) {
